@@ -1,0 +1,9 @@
+.github
+/node_modules
+/src
+/supabase
+.eslintrc.json
+.gitignore
+tsconfig.json
+yarn.lock
+
