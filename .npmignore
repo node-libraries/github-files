@@ -1,9 +1,6 @@
-.github
-/node_modules
-/src
-/supabase
+node_modules
+src
 .eslintrc.json
 .gitignore
 tsconfig.json
 yarn.lock
-
