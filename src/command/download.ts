@@ -1,10 +1,10 @@
 import { Argument, program, Option } from "commander";
-import { downloadGitHubFiles, getGitHubFileList } from "..";
+import { downloadGitHubFiles, getGitHubFileList } from "../index.js";
 
 export const downloadFiles = async (
   url: string,
   outputPath: string | undefined,
-  { parallels }: { parallels: string }
+  { parallels }: { parallels: string },
 ) => {
   const files = await getGitHubFileList(url);
   if (!files) {
@@ -21,6 +21,6 @@ export const download = program
   .addArgument(new Argument("[url]", "GitHub url").argRequired())
   .addArgument(new Argument("[outdir]", "Output dir"))
   .addOption(
-    new Option("-p, --parallels <parallels>", "Number of parallel downloads")
+    new Option("-p, --parallels <parallels>", "Number of parallel downloads"),
   )
   .action(downloadFiles);

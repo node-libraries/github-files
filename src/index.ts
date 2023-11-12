@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { promiseLimit } from "@node-libraries/promise-limit";
-import fetch from "cross-fetch";
 
 type GitHubFile = {
   url: string;
@@ -10,7 +9,7 @@ type GitHubFile = {
 
 const parseUrl = async (url: string) => {
   const reg = new RegExp(
-    "https://github.com/(.+?/.+?)/?(?:tree/(.+?)(?:/(.+)|$)|$)"
+    "https://github.com/(.+?/.+?)/?(?:tree/(.+?)(?:/(.+)|$)|$)",
   );
   const result = reg.exec(url);
   if (!result) return undefined;
@@ -22,8 +21,8 @@ const parseUrl = async (url: string) => {
       .then(
         (v) =>
           v.match(
-            /<span class="css-truncate-target" data-menu-button>([^<]+)<\/span>/
-          )?.[1]
+            /<span class="css-truncate-target" data-menu-button>([^<]+)<\/span>/,
+          )?.[1],
       ));
 
   return {
@@ -34,7 +33,7 @@ const parseUrl = async (url: string) => {
 };
 
 export const getGitHubFileList = async (
-  url: string
+  url: string,
 ): Promise<GitHubFile[] | undefined> => {
   const result = await parseUrl(url);
   if (!result) throw "Failed to parse url";
@@ -52,17 +51,18 @@ export const getGitHubFileList = async (
           },
         })
           .then((v) => (v?.ok ? v.json() : undefined))
-          .then((v) =>
-            v.paths
-              ?.filter(
-                (filePath: string) =>
-                  !filePath || filePath.match(`^${absolutePath}/`)
-              )
-              .map((filePath: string) => ({
-                url: `https://raw.githubusercontent.com/${repository}/${branch}/${filePath}`,
-                relativePath: path.posix.relative(absolutePath, filePath),
-              }))
-          )
+          .then(
+            (v) =>
+              v.paths
+                ?.filter(
+                  (filePath: string) =>
+                    !filePath || filePath.match(`^${absolutePath}/`),
+                )
+                .map((filePath: string) => ({
+                  url: `https://raw.githubusercontent.com/${repository}/${branch}/${filePath}`,
+                  relativePath: path.posix.relative(absolutePath, filePath),
+                })),
+          ),
     )
     .catch(() => undefined);
 };
@@ -72,7 +72,7 @@ export const downloadGitHubFiles = async (
   outdir: string,
   options?: {
     parallels?: number;
-  }
+  },
 ) => {
   const ps = promiseLimit();
   for (const { url, relativePath } of files) {

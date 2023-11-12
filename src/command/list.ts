@@ -1,5 +1,5 @@
 import { Argument, program, Option } from "commander";
-import { getGitHubFileList } from "..";
+import { getGitHubFileList } from "../index.js";
 
 export const fileList = async (url: string, { json }: { json?: boolean }) => {
   const files = await getGitHubFileList(url);

@@ -22,7 +22,7 @@ Commands:
 - Download files in the output folder with a parallel number of 5.
 
 ```sh
-npx github-files https://github.com/node-libraries/scaffold/tree/master/src output -p 5
+npx github-files download https://github.com/node-libraries/scaffold/tree/master/src output -p 5
 ```
 
 ## When called from a programme
