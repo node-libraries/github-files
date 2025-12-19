@@ -1,6 +1,6 @@
 node_modules
 src
-esm
+/esm
 .eslintrc.json
 .gitignore
 tsconfig.json
